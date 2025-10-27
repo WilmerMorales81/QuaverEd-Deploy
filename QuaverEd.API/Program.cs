@@ -12,6 +12,10 @@ builder.Services.AddSwaggerGen();
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
                       builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Debug logging
+Console.WriteLine($"DATABASE_URL: {Environment.GetEnvironmentVariable("DATABASE_URL")}");
+Console.WriteLine($"Connection String: {connectionString}");
+
 builder.Services.AddDbContext<QuaverEdContext>(options =>
     options.UseNpgsql(connectionString));
 
