@@ -1,0 +1,169 @@
+### QuaverEd API Tests
+### Base URL: http://localhost:5163/api
+
+### Variables
+@baseUrl = http://localhost:5163/api
+
+### 1. Search Customers by Name
+GET {{baseUrl}}/customers/search?name=John
+Content-Type: application/json
+
+### 2. Search Customers by Email
+GET {{baseUrl}}/customers/search?email=smith
+Content-Type: application/json
+
+### 3. Search Customers by Address
+GET {{baseUrl}}/customers/search?address=New York
+Content-Type: application/json
+
+### 4. Search Customers with Multiple Criteria
+GET {{baseUrl}}/customers/search?name=John&email=smith
+Content-Type: application/json
+
+### 5. Get All Customers Summary
+GET {{baseUrl}}/customers/summary
+Content-Type: application/json
+
+### 6. Get Customer Instruments (John Smith - ID 4)
+GET {{baseUrl}}/customers/4/instruments
+Content-Type: application/json
+
+### 7. Get Customer Instruments (Sarah Johnson - ID 5)
+GET {{baseUrl}}/customers/5/instruments
+Content-Type: application/json
+
+### 8. Get Orders by Date Range (Q1 2024)
+GET {{baseUrl}}/orders/date-range?from=2024-01-01&to=2024-03-31
+Content-Type: application/json
+
+### 9. Get Orders by Date Range (Full Year)
+GET {{baseUrl}}/orders/date-range?from=2024-01-01&to=2024-12-31
+Content-Type: application/json
+
+### 10. Get Orders by Price Range (Mid-range)
+GET {{baseUrl}}/orders/price-range?min=1000&max=5000
+Content-Type: application/json
+
+### 11. Get Orders by Price Range (High-value)
+GET {{baseUrl}}/orders/price-range?min=5000&max=100000
+Content-Type: application/json
+
+### 12. Get Sold Instruments (Q1 2024)
+GET {{baseUrl}}/instruments/sold?from=2024-01-01&to=2024-03-31
+Content-Type: application/json
+
+### 13. Get Sold Instruments (Full Year)
+GET {{baseUrl}}/instruments/sold?from=2024-01-01&to=2024-12-31
+Content-Type: application/json
+
+### 14. Get Customers by Instrument Type - Guitar
+GET {{baseUrl}}/reports/customers-by-instrument-type?category=guitar
+Content-Type: application/json
+
+### 15. Get Customers by Instrument Type - Brass
+GET {{baseUrl}}/reports/customers-by-instrument-type?category=brass
+Content-Type: application/json
+
+### 16. Get Customers by Instrument Type - Percussion
+GET {{baseUrl}}/reports/customers-by-instrument-type?category=percussion
+Content-Type: application/json
+
+### 17. Get Customers by Instrument Type - Piano
+GET {{baseUrl}}/reports/customers-by-instrument-type?category=piano
+Content-Type: application/json
+
+### 18. Test Case-Insensitive Search (lowercase)
+GET {{baseUrl}}/customers/search?name=john
+Content-Type: application/json
+
+### 19. Test Case-Insensitive Search (uppercase)
+GET {{baseUrl}}/customers/search?name=JOHN
+Content-Type: application/json
+
+### 20. Test Partial Name Search
+GET {{baseUrl}}/customers/search?name=Smith
+Content-Type: application/json
+
+### 21. Test Email Domain Search
+GET {{baseUrl}}/customers/search?email=@email.com
+Content-Type: application/json
+
+### 22. Test Address City Search
+GET {{baseUrl}}/customers/search?address=Los Angeles
+Content-Type: application/json
+
+### 23. Test Non-existent Customer
+GET {{baseUrl}}/customers/999/instruments
+Content-Type: application/json
+
+### 24. Test Empty Date Range
+GET {{baseUrl}}/orders/date-range?from=2025-01-01&to=2025-12-31
+Content-Type: application/json
+
+### 25. Test Empty Price Range
+GET {{baseUrl}}/orders/price-range?min=100000&max=200000
+Content-Type: application/json
+
+### 26. Test Invalid Date Format (should handle gracefully)
+GET {{baseUrl}}/orders/date-range?from=invalid-date&to=2024-12-31
+Content-Type: application/json
+
+### 27. Test Invalid Price Range (negative values)
+GET {{baseUrl}}/orders/price-range?min=-100&max=500
+Content-Type: application/json
+
+### 28. Test Non-existent Instrument Category
+GET {{baseUrl}}/reports/customers-by-instrument-type?category=nonexistent
+Content-Type: application/json
+
+### 29. Test Empty Search Parameters
+GET {{baseUrl}}/customers/search
+Content-Type: application/json
+
+### 30. Test Complex Search Combination
+GET {{baseUrl}}/customers/search?name=John&email=smith&address=New York
+Content-Type: application/json
+
+### Performance Tests
+
+### 31. Load Test - Customer Summary (should be fast)
+GET {{baseUrl}}/customers/summary
+Content-Type: application/json
+
+### 32. Load Test - All Sold Instruments
+GET {{baseUrl}}/instruments/sold?from=2020-01-01&to=2030-12-31
+Content-Type: application/json
+
+### 33. Load Test - Large Date Range Orders
+GET {{baseUrl}}/orders/date-range?from=2020-01-01&to=2030-12-31
+Content-Type: application/json
+
+### Edge Cases
+
+### 34. Test Boundary Date Range (single day)
+GET {{baseUrl}}/orders/date-range?from=2024-01-20&to=2024-01-20
+Content-Type: application/json
+
+### 35. Test Boundary Price Range (exact match)
+GET {{baseUrl}}/orders/price-range?min=899.99&max=899.99
+Content-Type: application/json
+
+### 36. Test Very Small Price Range
+GET {{baseUrl}}/orders/price-range?min=800&max=900
+Content-Type: application/json
+
+### 37. Test Very Large Price Range
+GET {{baseUrl}}/orders/price-range?min=0&max=100000
+Content-Type: application/json
+
+### 38. Test Special Characters in Search
+GET {{baseUrl}}/customers/search?name=Smith&email=test@example.com
+Content-Type: application/json
+
+### 39. Test Unicode Characters (if any in data)
+GET {{baseUrl}}/customers/search?name=ñ
+Content-Type: application/json
+
+### 40. Test SQL Injection Attempt (should be safe)
+GET {{baseUrl}}/customers/search?name='; DROP TABLE customers; --
+Content-Type: application/json
