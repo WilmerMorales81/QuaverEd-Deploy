@@ -4,7 +4,7 @@ using QuaverEd.API.Data;
 Console.WriteLine("=== QuaverEd API Starting ===");
 Console.WriteLine($"Environment: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
 Console.WriteLine($"Port: {Environment.GetEnvironmentVariable("PORT")}");
-Console.WriteLine($"Database URL: {Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "Configured" : "Not configured"}");
+Console.WriteLine($"Database URL: {(Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "Configured" : "Not configured")}");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +70,7 @@ app.MapGet("/", () => new {
     message = "QuaverEd API is running!", 
     timestamp = DateTime.UtcNow,
     version = "1.0.0",
-    databaseUrl = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")) ? "Configured" : "Not configured",
+    databaseUrl = (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")) ? "Configured" : "Not configured"),
     environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown"
 });
 
