@@ -15,6 +15,21 @@ namespace QuaverEd.API.Controllers
             _context = context;
         }
 
+        // GET: api/instruments
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Instrument>>> GetInstruments()
+        {
+            try
+            {
+                var instruments = await _context.Instruments.ToListAsync();
+                return Ok(instruments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving instruments", error = ex.Message });
+            }
+        }
+
         // Endpoint 7: Get all instruments that have sold in a given period
         [HttpGet("sold")]
         public async Task<ActionResult> GetSoldInstruments(DateTime from, DateTime to)

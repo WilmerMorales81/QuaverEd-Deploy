@@ -15,6 +15,21 @@ namespace QuaverEd.API.Controllers
             _context = context;
         }
 
+        // GET: api/customers
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        {
+            try
+            {
+                var customers = await _context.Customers.ToListAsync();
+                return Ok(customers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving customers", error = ex.Message });
+            }
+        }
+
         // Endpoint 1: Search customers by personal data
         [HttpGet("search")]
         public async Task<ActionResult> SearchCustomers(string? name, string? email, string? address)

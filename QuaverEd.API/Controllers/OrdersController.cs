@@ -15,6 +15,24 @@ namespace QuaverEd.API.Controllers
             _context = context;
         }
 
+        // GET: api/orders
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        {
+            try
+            {
+                var orders = await _context.Orders
+                    .Include(o => o.Customer)
+                    .Include(o => o.OrderItems)
+                    .ToListAsync();
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving orders", error = ex.Message });
+            }
+        }
+
         // Endpoint 2: Get all orders by date range
         [HttpGet("date-range")]
         public async Task<ActionResult> GetOrdersByDateRange(DateTime from, DateTime to)
