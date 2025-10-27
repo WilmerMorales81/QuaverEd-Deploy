@@ -41,8 +41,28 @@ namespace QuaverEd.API.Controllers
                 {
                     var instruments = new List<Instrument>
                     {
-                        new Instrument { Name = "Guitar", Brand = "Fender", Price = 599.99m, Stock = 10 },
-                        new Instrument { Name = "Piano", Brand = "Yamaha", Price = 1299.99m, Stock = 5 }
+                        new Instrument { 
+                            Name = "Electric Guitar", 
+                            ModelNumber = "STRAT-001",
+                            Manufacturer = "Fender", 
+                            Category = "String",
+                            RetailPrice = 599.99m,
+                            WholesalePrice = 399.99m,
+                            QuantityOnHand = 10,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
+                        },
+                        new Instrument { 
+                            Name = "Digital Piano", 
+                            ModelNumber = "P-125",
+                            Manufacturer = "Yamaha", 
+                            Category = "Keyboard",
+                            RetailPrice = 1299.99m,
+                            WholesalePrice = 899.99m,
+                            QuantityOnHand = 5,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
+                        }
                     };
                     
                     _context.Instruments.AddRange(instruments);
