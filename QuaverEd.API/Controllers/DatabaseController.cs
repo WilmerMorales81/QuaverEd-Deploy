@@ -21,6 +21,14 @@ namespace QuaverEd.API.Controllers
         {
             try
             {
+                // Debug: Show what DATABASE_URL we're getting
+                var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                Console.WriteLine($"=== DATABASE_URL Debug ===");
+                Console.WriteLine($"DATABASE_URL: '{databaseUrl}'");
+                Console.WriteLine($"Length: {databaseUrl?.Length ?? 0}");
+                Console.WriteLine($"Is null: {databaseUrl == null}");
+                Console.WriteLine($"Is empty: {string.IsNullOrEmpty(databaseUrl)}");
+                
                 // Ensure database is created
                 await _context.Database.EnsureCreatedAsync();
                 
@@ -97,6 +105,24 @@ namespace QuaverEd.API.Controllers
             {
                 return StatusCode(500, new { message = "Error checking database status", error = ex.Message });
             }
+        }
+
+        [HttpGet("env")]
+        public ActionResult GetEnvironmentVariables()
+        {
+            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            var aspnetcoreUrls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+            var aspnetcoreEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var port = Environment.GetEnvironmentVariable("PORT");
+            
+            return Ok(new {
+                DATABASE_URL = databaseUrl,
+                DATABASE_URL_LENGTH = databaseUrl?.Length ?? 0,
+                ASPNETCORE_URLS = aspnetcoreUrls,
+                ASPNETCORE_ENVIRONMENT = aspnetcoreEnv,
+                PORT = port,
+                message = "Environment variables retrieved"
+            });
         }
     }
 }
