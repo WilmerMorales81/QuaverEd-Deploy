@@ -29,11 +29,26 @@ namespace QuaverEd.API.Controllers
                 Console.WriteLine($"Is null: {databaseUrl == null}");
                 Console.WriteLine($"Is empty: {string.IsNullOrEmpty(databaseUrl)}");
                 
+                // Clean the DATABASE_URL string
+                if (!string.IsNullOrEmpty(databaseUrl))
+                {
+                    databaseUrl = databaseUrl.Trim();
+                    Console.WriteLine($"=== Cleaned DATABASE_URL ===");
+                    Console.WriteLine($"Cleaned: '{databaseUrl}'");
+                    Console.WriteLine($"Cleaned Length: {databaseUrl.Length}");
+                }
+                
+                // Create a temporary context with cleaned connection string
+                var optionsBuilder = new DbContextOptionsBuilder<QuaverEdContext>();
+                optionsBuilder.UseNpgsql(databaseUrl);
+                
+                using var tempContext = new QuaverEdContext(optionsBuilder.Options);
+                
                 // Ensure database is created
-                await _context.Database.EnsureCreatedAsync();
+                await tempContext.Database.EnsureCreatedAsync();
                 
                 // Add some sample data if tables are empty
-                if (!await _context.Customers.AnyAsync())
+                if (!await tempContext.Customers.AnyAsync())
                 {
                     var customers = new List<Customer>
                     {
@@ -41,11 +56,11 @@ namespace QuaverEd.API.Controllers
                         new Customer { Name = "Jane Smith", Email = "jane@example.com", Phone = "098-765-4321" }
                     };
                     
-                    _context.Customers.AddRange(customers);
-                    await _context.SaveChangesAsync();
+                    tempContext.Customers.AddRange(customers);
+                    await tempContext.SaveChangesAsync();
                 }
 
-                if (!await _context.Instruments.AnyAsync())
+                if (!await tempContext.Instruments.AnyAsync())
                 {
                     var instruments = new List<Instrument>
                     {
@@ -73,8 +88,8 @@ namespace QuaverEd.API.Controllers
                         }
                     };
                     
-                    _context.Instruments.AddRange(instruments);
-                    await _context.SaveChangesAsync();
+                    tempContext.Instruments.AddRange(instruments);
+                    await tempContext.SaveChangesAsync();
                 }
 
                 return Ok(new { message = "Database initialized successfully!" });
