@@ -59,4 +59,9 @@ app.MapGet("/", () => new {
 Console.WriteLine("=== Root Endpoint Mapped ===");
 
 Console.WriteLine("=== Starting Application ===");
-app.Run();
+
+// Ensure we listen on the correct port
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+Console.WriteLine($"=== Listening on port: {port} ===");
+
+app.Run($"http://0.0.0.0:{port}");
