@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuaverEd.API.Data;
+using QuaverEd.API.Models;
 
 namespace QuaverEd.API.Controllers
 {
