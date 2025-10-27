@@ -31,6 +31,18 @@ namespace QuaverEd.API.Controllers
             }
         }
 
+        // GET: api/customers/test
+        [HttpGet("test")]
+        public ActionResult TestEndpoint()
+        {
+            return Ok(new { 
+                message = "API is working!", 
+                timestamp = DateTime.UtcNow,
+                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+                databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "Configured" : "Not configured"
+            });
+        }
+
         // Endpoint 1: Search customers by personal data
         [HttpGet("search")]
         public async Task<ActionResult> SearchCustomers(string? name, string? email, string? address)
