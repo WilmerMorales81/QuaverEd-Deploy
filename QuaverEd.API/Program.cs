@@ -8,16 +8,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Entity Framework
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
-                      builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Debug logging
-Console.WriteLine($"DATABASE_URL: {Environment.GetEnvironmentVariable("DATABASE_URL")}");
-Console.WriteLine($"Connection String: {connectionString}");
-
-builder.Services.AddDbContext<QuaverEdContext>(options =>
-    options.UseNpgsql(connectionString));
+// Add Entity Framework - ONLY if DATABASE_URL is available
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    builder.Services.AddDbContext<QuaverEdContext>(options =>
+        options.UseNpgsql(databaseUrl));
+}
 
 var app = builder.Build();
 
@@ -50,7 +47,9 @@ app.MapControllers();
 app.MapGet("/", () => new { 
     message = "QuaverEd API is running!", 
     timestamp = DateTime.UtcNow,
-    version = "1.0.0"
+    version = "1.0.0",
+    databaseUrl = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")) ? "Configured" : "Not configured",
+    environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown"
 });
 
 app.Run();
