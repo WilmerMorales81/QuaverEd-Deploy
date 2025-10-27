@@ -46,4 +46,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Health check endpoint
+app.MapGet("/", () => new { 
+    message = "QuaverEd API is running!", 
+    timestamp = DateTime.UtcNow,
+    version = "1.0.0"
+});
+
 app.Run();
