@@ -2,9 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using QuaverEd.API.Data;
 
 Console.WriteLine("=== QuaverEd API Starting ===");
-Console.WriteLine($"Environment: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
-Console.WriteLine($"Port: {Environment.GetEnvironmentVariable("PORT")}");
-Console.WriteLine($"Database URL: {(Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "Configured" : "Not configured")}");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,13 +32,6 @@ var app = builder.Build();
 Console.WriteLine("=== App Built ===");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// Enable Swagger in production for Railway deployment
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -50,12 +40,6 @@ app.UseSwaggerUI(c =>
 });
 
 Console.WriteLine("=== Swagger Configured ===");
-
-// Only use HTTPS redirection in development
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
 
 app.UseAuthorization();
 
@@ -69,9 +53,7 @@ Console.WriteLine("=== Controllers Mapped ===");
 app.MapGet("/", () => new { 
     message = "QuaverEd API is running!", 
     timestamp = DateTime.UtcNow,
-    version = "1.0.0",
-    databaseUrl = (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")) ? "Configured" : "Not configured"),
-    environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown"
+    version = "1.0.0"
 });
 
 Console.WriteLine("=== Root Endpoint Mapped ===");
