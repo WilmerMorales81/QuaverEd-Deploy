@@ -16,11 +16,26 @@ Console.WriteLine("=== Services Added ===");
 
 // Add Entity Framework - ONLY if DATABASE_URL is available
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+Console.WriteLine($"=== DATABASE_URL Debug ===");
+Console.WriteLine($"DATABASE_URL: '{databaseUrl}'");
+Console.WriteLine($"Length: {databaseUrl?.Length ?? 0}");
+Console.WriteLine($"Is null: {databaseUrl == null}");
+Console.WriteLine($"Is empty: {string.IsNullOrEmpty(databaseUrl)}");
+
 if (!string.IsNullOrEmpty(databaseUrl))
 {
     Console.WriteLine("=== Adding Database Context ===");
-    builder.Services.AddDbContext<QuaverEdContext>(options =>
-        options.UseNpgsql(databaseUrl));
+    try
+    {
+        builder.Services.AddDbContext<QuaverEdContext>(options =>
+            options.UseNpgsql(databaseUrl));
+        Console.WriteLine("=== Database Context Added Successfully ===");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"=== Error adding Database Context: {ex.Message} ===");
+        throw;
+    }
 }
 else
 {
