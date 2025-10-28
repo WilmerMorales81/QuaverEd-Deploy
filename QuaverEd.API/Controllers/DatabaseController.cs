@@ -44,8 +44,10 @@ namespace QuaverEd.API.Controllers
                 
                 using var tempContext = new QuaverEdContext(optionsBuilder.Options);
                 
-                // Ensure database is created
-                await tempContext.Database.EnsureCreatedAsync();
+                // Step 3: Create tables using migrations
+                Console.WriteLine("=== Creating tables using migrations ===");
+                await tempContext.Database.MigrateAsync();
+                Console.WriteLine("=== Tables created successfully ===");
                 
                 // Add some sample data if tables are empty
                 if (!await tempContext.Customers.AnyAsync())
