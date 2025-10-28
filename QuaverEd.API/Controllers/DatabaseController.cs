@@ -21,26 +21,28 @@ namespace QuaverEd.API.Controllers
         {
             try
             {
-                // Debug: Show what DATABASE_URL we're getting
-                var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-                Console.WriteLine($"=== DATABASE_URL Debug ===");
-                Console.WriteLine($"DATABASE_URL: '{databaseUrl}'");
-                Console.WriteLine($"Length: {databaseUrl?.Length ?? 0}");
-                Console.WriteLine($"Is null: {databaseUrl == null}");
-                Console.WriteLine($"Is empty: {string.IsNullOrEmpty(databaseUrl)}");
+                // Try building connection string from individual variables
+                var pgHost = Environment.GetEnvironmentVariable("PGHOST");
+                var pgPort = Environment.GetEnvironmentVariable("PGPORT");
+                var pgUser = Environment.GetEnvironmentVariable("PGUSER");
+                var pgPassword = Environment.GetEnvironmentVariable("PGPASSWORD");
+                var pgDatabase = Environment.GetEnvironmentVariable("PGDATABASE");
                 
-                // Clean the DATABASE_URL string
-                if (!string.IsNullOrEmpty(databaseUrl))
-                {
-                    databaseUrl = databaseUrl.Trim();
-                    Console.WriteLine($"=== Cleaned DATABASE_URL ===");
-                    Console.WriteLine($"Cleaned: '{databaseUrl}'");
-                    Console.WriteLine($"Cleaned Length: {databaseUrl.Length}");
-                }
+                Console.WriteLine($"=== Individual Variables Debug ===");
+                Console.WriteLine($"PGHOST: '{pgHost}'");
+                Console.WriteLine($"PGPORT: '{pgPort}'");
+                Console.WriteLine($"PGUSER: '{pgUser}'");
+                Console.WriteLine($"PGPASSWORD: '{(string.IsNullOrEmpty(pgPassword) ? "NULL" : "SET")}'");
+                Console.WriteLine($"PGDATABASE: '{pgDatabase}'");
                 
-                // Create a temporary context with cleaned connection string
+                // Build connection string manually
+                var connectionString = $"Host={pgHost};Port={pgPort};Database={pgDatabase};Username={pgUser};Password={pgPassword};";
+                Console.WriteLine($"=== Built Connection String ===");
+                Console.WriteLine($"Connection: '{connectionString}'");
+                
+                // Create a temporary context with manually built connection string
                 var optionsBuilder = new DbContextOptionsBuilder<QuaverEdContext>();
-                optionsBuilder.UseNpgsql(databaseUrl);
+                optionsBuilder.UseNpgsql(connectionString);
                 
                 using var tempContext = new QuaverEdContext(optionsBuilder.Options);
                 
